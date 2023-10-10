@@ -1,119 +1,127 @@
-from abc import ABC, abstractmethod
 import math
 
-class shape(ABC):
-    @abstractmethod
+class Shape:
     def draw(self):
-        return
-    @abstractmethod
-    def perimeter(self):
-        return
-    @abstractmethod
-    def area(self):
-        return
-    @abstractmethod
-    def get_sizes():
-        return
+        pass
 
-class circle(shape):
-    def __init__(self, r = 1) -> None:
-        super().__init__()
-        self.__r = r
-    def get_sizes(self):
-        return self.__r
-    def draw(self):
-        super().draw()
-        print ("Draw a circle")
-        return
+    def perimeter(self):
+        pass
+
     def area(self):
-        super().draw()
+        pass
+
+    def get_sizes(self):
+        pass
+
+class Circle(Shape):
+    def __init__(self, r=1):
+        self.__r = r
+
+    def draw(self):
+        print("Draw a circle")
+
+    def area(self):
         return math.pow(self.__r, 2) * math.pi
+
     def perimeter(self):
         return 2 * self.__r * math.pi
 
-class triangle(shape):
-    def __init__(self, a = 1, b = 1, c = 1) -> None:
-        super().__init__()
+    def get_sizes(self):
+        return [self.__r]
+
+class Triangle(Shape):
+    def __init__(self, a=1, b=1, c=1):
         self.__a = a
         self.__b = b
         self.__c = c
-    def get_sizes(self):
-        super().draw()
-        my_list = [self.__a, self.__b, self.__c]
-        return my_list
+
     def draw(self):
-        super().draw()
         print("Draw a triangle")
-        return
+
     def area(self):
-        super().draw()
-        s = (self.__a + self.__b + self.__c)/2
-        return math.sqrt(s*(self.__a)*(self.__b)*(self.__c))
+        s = (self.__a + self.__b + self.__c) / 2
+        return math.sqrt(s * (self.__a) * (self.__b) * (self.__c))
+
     def perimeter(self):
         return self.__a + self.__b + self.__c
 
-class rectangle(shape):
-    def __init__(self, a = 1, b = 1) -> None:
-        super().__init__()
-        self.__heigh = a
-        self.__width = b
     def get_sizes(self):
-        super().draw()
-        my_list = [self.__heigh, self.__width]
-        return my_list
+        return [self.__a, self.__b, self.__c]
+
+class Rectangle(Shape):
+    def __init__(self, height=1, width=1):
+        self.__height = height
+        self.__width = width
+
     def draw(self):
-        super().draw()
-        print ("Draw a rectangle")
-        return
+        print("Draw a rectangle")
+
     def area(self):
-        super().draw()
-        return self.__heigh * self.__width
+        return self.__height * self.__width
+
     def perimeter(self):
-        return 2*self.__heigh + 2*self.__width
+        return 2 * self.__height + 2 * self.__width
 
-shapes = []
+    def get_sizes(self):
+        return [self.__height, self.__width]
 
-while(1):
-    text = input()
-    if text == "q" or text == "quit":
+class ShapeManager:
+    def __init__(self):
+        self.shapes = []
+
+    def create_circle(self, r):
+        self.shapes.append(Circle(r))
+
+    def create_triangle(self, a, b, c):
+        self.shapes.append(Triangle(a, b, c))
+
+    def create_rectangle(self, height, width):
+        self.shapes.append(Rectangle(height, width))
+
+    def display_shapes(self):
+        for shp in self.shapes:
+            shp.draw()
+            print("--sizes: ", shp.get_sizes())
+            print("--area:  ", shp.area())
+            print("--perimeter: ", shp.perimeter())
+            print('\n')
+
+shape_manager = ShapeManager()
+
+while True:
+    print("Options:")
+    print("1. Create a circle")
+    print("2. Create a triangle")
+    print("3. Create a rectangle")
+    print("4. Display shapes")
+    print("5. Quit")
+
+    choice = input("Enter the number of your choice: ")
+
+    if choice == "1":
+        try:
+            r = float(input("Enter the radius of the circle: "))
+            shape_manager.create_circle(r)
+        except ValueError:
+            print("Invalid input. Please enter a valid number for the radius.")
+    elif choice == "2":
+        try:
+            a = float(input("Enter the length of side a: "))
+            b = float(input("Enter the length of side b: "))
+            c = float(input("Enter the length of side c: "))
+            shape_manager.create_triangle(a, b, c)
+        except ValueError:
+            print("Invalid input. Please enter valid numbers for the sides.")
+    elif choice == "3":
+        try:
+            height = float(input("Enter the height of the rectangle: "))
+            width = float(input("Enter the width of the rectangle: "))
+            shape_manager.create_rectangle(height, width)
+        except ValueError:
+            print("Invalid input. Please enter valid numbers for the dimensions.")
+    elif choice == "4":
+        shape_manager.display_shapes()
+    elif choice == "5":
         break
-    words = text.split()
-    if words[0] != "create":
-        print("Wrong input")
-        continue
-    if (words[1] == "circle" and len(words) == 3):
-        try:
-            r = float(words[2])
-        except ValueError:
-            print("You did not enter a number.")
-            continue
-        shapes.append(circle(float(words[2])))
-    elif (words[1] == "triangle" and len(words) == 5):
-        try:
-            a = float(words[2])
-            b = float(words[3])
-            c = float(words[4])
-        except ValueError:
-            print("You did not enter a number.")
-            continue
-        shapes.append(triangle(float(words[2]), float(words[3]), float(words[4])))
-    elif (words[1] == "rectangle" and len(words) == 4):
-        try:
-            a = float(words[2])
-            b = float(words[3])
-        except ValueError:
-            print("You did not enter a number.")
-            continue
-        shapes.append(rectangle(float(words[2]), float(words[3])))
     else:
-        print("Wrong input")
-        continue
-
-print('\n')
-for shp in shapes:
-    shp.draw()
-    print("--sizes: ", shp.get_sizes())
-    print("--area:  ", shp.area())
-    print("--perimeter: ", shp.perimeter())
-    print('\n')
-   
+        print("Invalid choice. Please enter a valid option (1-5).")
