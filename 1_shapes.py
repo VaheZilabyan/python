@@ -1,15 +1,20 @@
+from abc import ABC, abstractmethod
 import math
 
 class Shape:
+    @abstractmethod
     def draw(self):
         pass
 
+    @abstractmethod
     def perimeter(self):
         pass
 
+    @abstractmethod
     def area(self):
         pass
 
+    @abstractmethod
     def get_sizes(self):
         pass
 
@@ -68,6 +73,35 @@ class Rectangle(Shape):
 class ShapeManager:
     def __init__(self):
         self.shapes = []
+    
+    def create_shape(self, choice):
+        if choice == "1":
+            try:
+                r = float(input("Enter the radius of the circle: "))
+                shape_manager.create_circle(r)
+            except ValueError:
+                print("Invalid input. Please enter a valid number for the radius.")
+        elif choice == "2":
+            try:
+                a = float(input("Enter the length of side a: "))
+                b = float(input("Enter the length of side b: "))
+                c = float(input("Enter the length of side c: "))
+                shape_manager.create_triangle(a, b, c)
+            except ValueError:
+                print("Invalid input. Please enter valid numbers for the sides.")
+        elif choice == "3":
+            try:
+                height = float(input("Enter the height of the rectangle: "))
+                width = float(input("Enter the width of the rectangle: "))
+                shape_manager.create_rectangle(height, width)
+            except ValueError:
+                print("Invalid input. Please enter valid numbers for the dimensions.")
+        elif choice == "4":
+            shape_manager.display_shapes()
+        elif choice == "5":
+            return
+        else:
+            print("Invalid choice. Please enter a valid option (1-5).")
 
     def create_circle(self, r):
         self.shapes.append(Circle(r))
@@ -97,31 +131,4 @@ while True:
     print("5. Quit")
 
     choice = input("Enter the number of your choice: ")
-
-    if choice == "1":
-        try:
-            r = float(input("Enter the radius of the circle: "))
-            shape_manager.create_circle(r)
-        except ValueError:
-            print("Invalid input. Please enter a valid number for the radius.")
-    elif choice == "2":
-        try:
-            a = float(input("Enter the length of side a: "))
-            b = float(input("Enter the length of side b: "))
-            c = float(input("Enter the length of side c: "))
-            shape_manager.create_triangle(a, b, c)
-        except ValueError:
-            print("Invalid input. Please enter valid numbers for the sides.")
-    elif choice == "3":
-        try:
-            height = float(input("Enter the height of the rectangle: "))
-            width = float(input("Enter the width of the rectangle: "))
-            shape_manager.create_rectangle(height, width)
-        except ValueError:
-            print("Invalid input. Please enter valid numbers for the dimensions.")
-    elif choice == "4":
-        shape_manager.display_shapes()
-    elif choice == "5":
-        break
-    else:
-        print("Invalid choice. Please enter a valid option (1-5).")
+    shape_manager.create_shape(choice)
